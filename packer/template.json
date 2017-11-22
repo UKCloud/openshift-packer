@@ -1,0 +1,31 @@
+{
+  "_comment": "Template file pulling from centos72",
+  "builders": [
+    {
+      "type": "openstack",
+      "image_name": "centos7-openshift",
+      "source_image": "c09aceb5-edad-4392-bc78-197162847dd1",
+      "flavor": "c46be6d1-979d-4489-8ffe-e421a3c83fdd",
+      "ssh_keypair_name": "ukcloudos",
+      "ssh_private_key_file": "/Users/bobby/.ssh/ukcloudos",
+      "use_floating_ip": true,
+      "floating_ip_pool": "internet",
+      "ssh_username": "centos",
+      "networks": "724604f9-d5a1-4e68-bc26-6c5bf393f4a8",
+      "ssh_pty" : true,
+      "security_groups": "openshift_secgroup"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo sh -c 'yum install -y wget docker'",
+        "sudo sh -c 'wget https://github.com/openshift/origin/releases/download/v3.7.0-rc.0/openshift-origin-server-v3.7.0-rc.0-e92d5c5-linux-64bit.tar.gz'",
+        "sudo sh -c 'tar -zxf openshift-origin-server-*.tar.gz'",
+        "sudo sh -c 'cp openshift-origin-server-v3.7.0-rc.0-e92d5c5-linux-64bit/oc /usr/local/sbin'",
+        "sudo sh -c 'echo INSECURE_REGISTRY=--insecure-registry 172.30.0.0/16 >> /etc/sysconfig/docker'"
+      ]
+    }
+  ]
+}
